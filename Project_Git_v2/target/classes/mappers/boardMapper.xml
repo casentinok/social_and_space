@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.project.mapper.BoardMapper">
+
+
+	<select id="takerListAll"
+		resultType="kr.co.project.domain.CommonBoardVO" parameterType="kr.co.project.domain.Criteria">
+	<![CDATA[
+		SELECT *
+		FROM common_board
+		where user_id IN (
+			select user_id from user where user_type= 0
+		)  order by like_cnt desc, reg_date desc
+		LIMIT #{startPage},#{perPageNum}
+	]]>
+	</select>
+<select id="giverListAll"
+		resultType="kr.co.project.domain.CommonBoardVO">
+	<![CDATA[
+		SELECT *
+		FROM common_board
+		where user_id IN (
+			select user_id from user where user_type= 1
+		)  order by like_cnt desc, reg_date desc
+	]]>
+	</select>
+	<select id="userTypeListCount" resultType="int">
+		 <![CDATA[
+		 SELECT *
+		FROM common_board
+		where user_id IN (
+			select user_id from user where user_type= #{type}
+		) 
+		 ]]>
+	</select>
+	
+	<select id="giverboardcount" resultType="int">
+		 <![CDATA[
+		 SELECT count(*)
+		FROM giver_board
+		
+		 ]]>
+	</select>
+	
+	<select id="selectgiverList" parameterType="kr.co.project.domain.Criteria" resultType="kr.co.project.domain.CommonBoardVO">
+	<![CDATA[
+	SELECT *
+	FROM COMMON_BOARD
+	WHERE BOARD_ID IN (SELECT BOARD_ID FROM GIVER_BOARD)
+	ORDER BY LIKE_CNT DESC, REG_DATE DESC
+	LIMIT #{startPage},#{perPageNum}	
+	]]>
+	</select>
+	
+	<select id="tsearch" parameterType="hashmap" resultType="kr.co.project.domain.CommonBoardVO">
+	<![CDATA[
+		select *
+		from common_board
+		where user_id in (
+			select user_id from user where user_id = #{user_id}
+		)  
+		order by like_cnt desc, reg_date desc
+		limit #{pageStart},#{perPageNum}
+	]]>
+	</select>
+	
+	<select id="favoriteTypeList" resultType="kr.co.project.domain.CommonBoardVO" parameterType="kr.co.project.domain.FavoriteType">
+	<![CDATA[
+		select c.board_id as `board_id`, c.board_content as `board_content`,c.like_cnt as `like_cnt`,  c.reg_date as `reg_date`, c.user_id as `user_id`, c.thumb_img as `thumb_img`
+		from common_board as `c`, user as `u`, board_has_favorite as `b`, favorite as `f` 
+		where `c`.user_id = `u`.user_id 
+		and `c`.board_id = `b`.board_id 
+		and `b`.favorite_id = `f`.favorite_id 
+		and `f`.favorite_name = #{favorite_name} 
+		and `u`.user_type='1' 
+		order by reg_date desc, like_cnt desc
+		 limit #{startPage}, #{perPageNum}
+	]]>
+	</select>
+	
+	<select id="favoriteListCount"  resultType="int">
+		<![CDATA[
+		select count(*)
+		from common_board as `c`, user as `u`, board_has_favorite as `b`, favorite as `f` 
+		where `c`.user_id = `u`.user_id and `c`.board_id = `b`.board_id and `b`.favorite_id = `f`.favorite_id and `f`.favorite_name = #{favorite_name} and `u`.user_type='1';
+		]]>
+	</select>
+	
+	<select id="userBoardList" resultType="kr.co.project.domain.CommonBoardVO">
+	select *
+	from common_board
+	where user_id = #{user_id}
+	limit #{pageStart} , #{perPageNum}
+	</select>
+	<select id="getWritedBoardID" resultType="int">
+	SELECT board_id FROM common_board where user_id = #{user_id} order by reg_date desc limit 1
+	</select>
+	<insert id="takerBoardWrite">
+	insert into common_board (board_content,user_id,thumb_img) values(#{board_content},#{user_id},#{thumb_img})
+	</insert>
+	
+	<insert id="giverWriteBoard">
+	insert into giver_board (addr,amenities1,amenities2,amenities3,amenities4,amenities_etc,booking_enddate,booking_startdate,people,board_id) 
+	values(#{addr},#{amenities1},#{amenities2},#{amenities3},#{amenities4},#{amenities_etc},#{booking_enddate},#{booking_startdate},#{people},#{board_id})
+	</insert>
+	
+	
+	<!-- 20190521 ts -->
+	
+	<!--  <insert id="create">
+		insert into tbl_board (title, content, writer)
+		values(#{title},#{content}, #{writer})
+	</insert>
+
+	<select id="read" resultType="org.zerock.domain.BoardVO">
+		select
+		bno, title, content, writer, regdate, viewcnt , replycnt
+		from
+		tbl_board
+		where bno = #{bno}
+	</select>
+ -->
+	<select id="listAll" resultType="kr.co.project.domain.CommonBoardVO">
+ <![CDATA[
+select
+	board_id, board_content, like_cnt, reg_date, user_id, thumb_img
+from 
+	sns_prj.`common_board`
+	
+ ]]>
+	</select>
+	
+	<select id="listUser" resultType="kr.co.project.domain.CommonBoardVO" parameterType = "hashmap">
+ <![CDATA[
+select
+	*
+from 
+	sns_prj.`common_board`
+where 
+	user_id = #{user_id}
+order by board_id desc
+limit #{pageStart} , #{perPageNum}
+
+	
+ ]]>
+	</select>
+	
+	<select id="commonboard" resultType="kr.co.project.domain.CommonBoardVO">
+ <![CDATA[
+select
+	*
+from 
+	sns_prj.`common_board`
+where 
+	board_id = #{board_id}
+	
+ ]]>
+	</select>
+	
+	
+	<select id="giverboard" resultType="kr.co.project.domain.GiverBoardVO">
+ <![CDATA[
+select
+	*
+from 
+	sns_prj.`giver_board`
+where 
+	board_id = #{board_id}
+	
+ ]]>
+ 
+	</select>
+	
+	
+	<insert id = "insertcomment" parameterType="kr.co.project.domain.CommentVO">
+	INSERT 
+	INTO `sns_prj`.`comment` ( `user_id`, `content`, `comment_star`, `board_id`) 
+	VALUES (#{user_id}, #{content}, #{comment_star}, #{board_id});
+	</insert>
+	
+		<select id="commentlistboardid" resultType="kr.co.project.domain.CommentVO">
+ <![CDATA[
+select
+	*
+from 
+	sns_prj.`comment`
+where
+	board_id = #{board_id}
+	
+ ]]>
+	</select>
+	
+	<select id ="selectcommentthumb" resultType = "string" parameterType="int">
+	select
+	thumb_nail
+    from common_board c, comment m, user u 
+    where c.board_id = m.board_id
+    and m.user_id = u.user_id
+    and c.board_id = #{board_id}
+	</select>
+	
+	
+	
+	<!--boardupdate   -->
+	<update id="updateboardtaker" parameterType="kr.co.project.domain.CommonBoardVO">
+	 <![CDATA[
+	 UPDATE 
+	 	`sns_prj`.`common_board` 
+	 SET 
+	 	`board_content` = #{board_content} 
+	 	WHERE 
+	 	`board_id` = #{board_id}
+	  ]]>
+	</update>
+	
+	
+	<update id="updateboardgiver" parameterType="kr.co.project.domain.GiverBoardVO">
+	 <![CDATA[
+	UPDATE `sns_prj`.`giver_board` 
+	SET `addr` = #{addr}, 
+	`amenities1` = #{amenities1}, 
+	`amenities2` = #{amenities2}, 
+	`amenities3` = #{amenities3}, 
+	`amenities4` = #{amenities4}, 
+	`amenities_etc` = #{amenities_etc}, 
+	`booking_enddate` = #{booking_enddate}, 
+	`booking_startdate` = #{booking_startdate}, 
+	`people` = #{people}
+	WHERE 
+	`board_id` = #{board_id}
+
+	  ]]>
+	</update>
+	
+	<!-- delete -->
+	<delete id="deleteboard" parameterType="kr.co.project.domain.CommonBoardVO">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`common_board` 
+		WHERE (`board_id` = #{board_id});
+	]]>
+	</delete>
+	
+	<delete id="deleteboardgiver" parameterType="kr.co.project.domain.GiverBoardVO">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`giver_board` 
+		WHERE (`board_id` = #{board_id});
+	
+	]]>
+	</delete>
+	
+	<delete id="deletecomment" parameterType="int">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`comment` 
+		WHERE (`comment_id` = #{comment_id});
+	
+	]]>
+	</delete>
+	
+	<delete id="deletecomment_boardid" parameterType="int">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`comment` 
+		WHERE (`board_id` = #{board_id});
+	
+	]]>
+	</delete>
+	
+	<delete id="deletecomment_userid" parameterType="string">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`comment` 
+		WHERE (`user_id` = #{user_id});
+	
+	]]>
+	</delete>
+	
+	<delete id="deletegiverboard_boardid" parameterType="int">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`giver_board` 
+		WHERE (`board_id` = #{board_id});
+	]]>
+	</delete>
+	
+	<delete id="deletecontentimg" parameterType="string">
+	<![CDATA[
+	delete from sns_prj.content_img
+	where board_id = (select board_id from common_board where user_id = #{user_id});
+	]]>
+	</delete>
+	
+	<delete id="deletegiverboard_userid" parameterType="string">
+	<![CDATA[
+	delete from sns_prj.giver_board
+	where board_id = (select board_id from common_board where user_id = #{user_id});
+	]]>
+	</delete>
+	
+	<delete id="deletecommonboard_boardid" parameterType="int">
+	<![CDATA[
+		DELETE FROM `sns_prj`.`common_board` 
+		WHERE (`board_id` = #{board_id});
+	]]>
+	</delete>
+	
+	<delete id="deletecommonboard_userid" parameterType="string">
+		DELETE FROM `sns_prj`.`common_board` 
+		WHERE (`user_id` = #{user_id});
+	</delete>
+	
+	<update id="updateBoardThumbImg">
+		update common_board set thumb_img =#{thumb_img}
+		where board_id = #{board_id}
+	</update>
+	
+	<select id ="addrlist" resultType="String">
+      select addr from giver_board g left join common_board c on g.board_id = c.board_id order by like_cnt desc, reg_date desc; 
+   </select>
+   
+	<select id ="getaddr" resultType="String" parameterType="int">
+      select addr from giver_board
+		where board_id = #{board_id}
+   </select>
+   
+   <select id="searchthumb" resultType="string">
+   select thumb_img from sns_prj.common_board where board_id = #{board_id};
+   </select>
+   
+	 <select id="psearch" parameterType="kr.co.project.domain.SearchVO" resultType="kr.co.project.domain.SearchVO">
+	
+	      select distinct(`c`.board_id), `c`.board_content, `c`.like_cnt, `c`.reg_date, `c`.user_id, `c`.thumb_img, `g`.addr
+	      from common_board as `c`, giver_board as `g`, board_has_favorite as `f`
+	      where `c`.board_id = `g`.board_id
+	      and `c`.board_id = `f`.board_id
+	      and `g`.people >= #{people} 
+	      <include refid="favorite_id"></include>
+	      <include refid="booking_startdate"></include>
+	      <include refid="booking_enddate"></include>
+	      <include refid="addr"></include>
+	      order by like_cnt desc, reg_date desc
+	      limit #{pageStart},#{perPageNum}
+	
+	   </select>
+	   
+	   <sql id="favorite_id">
+	    <if test="favorite_id != 0">
+	      and `f`.favorite_id = #{favorite_id}
+	   	</if>
+	   </sql>
+	   
+	   <sql id="booking_startdate">
+ 	    <if test= "booking_startdate != null">
+ 	    <![CDATA[
+	      and `g`.booking_startdate <= #{booking_startdate}
+	    ]]> 
+	   	</if>
+	   </sql>
+	   
+	   <sql id="booking_enddate">
+	    <if test="booking_enddate != null">
+	    <![CDATA[
+	      and `g`.booking_enddate >= #{booking_enddate}
+	    ]]>
+	   	</if>
+	   </sql>
+	   
+	   <sql id="addr">
+	    <if test="addr != null">
+	    <![CDATA[
+	      and `g`.addr like concat ('%',#{addr},'%')
+	    ]]>
+	   	</if>
+	   </sql>
+	   
+	   <select id="booklikststart" resultType="string">
+	   select booking_startdate 
+	   from `sns_prj`.`booking` 
+	   where board_id = #{board_id} 
+	   order by user_id ASC
+	   
+	   </select>
+	   
+	   <select id="booklistend" resultType="string">
+	   select booking_enddate 
+	   from `sns_prj`.`booking` 
+	   where board_id = #{board_id} 
+	   order by user_id ASC
+	   
+	   </select>
+   
+	
+</mapper>

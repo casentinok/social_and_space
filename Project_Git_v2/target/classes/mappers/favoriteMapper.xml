@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.project.FavoriteMapper">
+
+	<insert id="userinsertfavorite" parameterType="kr.co.project.domain.UserHasFavoriteVO">
+	insert 
+	into `sns_prj`.`user_has_favorite` 
+	values (#{user_id},#{favorite_id});
+	</insert>
+	
+	<insert id="boardinsertfavorite" parameterType="kr.co.project.domain.BoardHasFavoriteVO">
+	insert 
+	into `sns_prj`.`board_has_favorite` 
+	values (#{board_id},#{favorite_id});
+	</insert>
+	
+	<delete id="userdeletefavorite" parameterType="kr.co.project.domain.UserHasFavoriteVO">
+	delete
+	from `sns_prj`.`user_has_favorite`
+	where user_id = #{user_id}
+	and favorite_id = #{favorite_id}
+	</delete>
+	
+	<delete id="boarddeletefavorite" parameterType="kr.co.project.domain.BoardHasFavoriteVO">
+	delete
+	from `sns_prj`.`board_has_favorite` 
+	where board_id = #{board_id}
+	and favorite_id = #{favorite_id}
+	</delete>
+	
+	<delete id="boarddel_boardid" parameterType="int">
+	delete
+	from `sns_prj`.`board_has_favorite` 
+	where board_id = #{board_id}
+	
+	</delete>
+	
+	<select id = "selectfavo_user" parameterType="String" resultType="int">
+	select 
+		favorite_id 
+	from 
+		sns_prj.user_has_favorite 
+	where 
+		user_id = #{user_id}
+	order by favorite_id asc
+	</select>
+	
+	<select id = "searchfavorite_boardid" parameterType="int" resultType="int">
+	select 
+		favorite_id 
+	from 
+		sns_prj.board_has_favorite 
+	where 
+		board_id = #{board_id}
+	order by favorite_id asc
+	</select>
+	
+	<select id = "selectfavname" parameterType="kr.co.project.domain.CommonBoardVO" resultType="string">
+	<![CDATA[
+	select 
+		favorite_name
+  	from 
+  		`sns_prj`.`favorite`
+  	where 
+  		favorite_id in 
+  		(
+		  select 
+		  	favorite_id
+		  from
+		  	`sns_prj`.`board_has_favorite`
+		  where
+		  	 board_id in(
+				  select 
+				  	board_id 
+				  from 
+				  	common_board 
+				  where 
+				  	user_id = #{user_id} and board_id = #{board_id}
+				  	)
+		)
+  ]]>	
+	</select>
+	
+	<delete id="deletefavo_userid" parameterType="string">
+	<![CDATA[
+		delete
+		from sns_prj.`user_has_favorite`
+		where user_id = #{user_id}
+		]]>	
+	</delete>
+	
+	
+	<delete id="delfav_userid" parameterType="string">
+	<![CDATA[
+	delete from sns_prj.`board_has_favorite`
+	where board_id = (select board_id from common_board where user_id = #{user_id});
+	]]>
+	</delete>
+	
+</mapper>

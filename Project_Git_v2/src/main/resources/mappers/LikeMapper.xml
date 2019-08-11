@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.project.mapper.LikeMapper">
+
+	<insert id="insertLike" parameterType="kr.co.project.domain.LikeVO">
+		insert 
+		into `sns_prj`.`like`(`board_id`, `user_id`)
+		values (#{board_id}, #{user_id})
+	</insert>
+	
+	<delete id="removeLike" parameterType="kr.co.project.domain.LikeVO">
+		delete
+		from sns_prj.`like`
+		where user_id = #{user_id}
+		and board_id = #{board_id}
+	</delete>
+	
+	<delete id="deletelike_boardid" parameterType="int">
+	<![CDATA[
+		delete
+		from sns_prj.`like`
+		where board_id = #{board_id}
+		]]>	
+	</delete>
+	
+	<delete id="deletelike_userid" parameterType="string">
+	<![CDATA[
+		delete
+		from sns_prj.`like`
+		where user_id = #{user_id}
+		]]>	
+	</delete>
+	
+	<select id="checkLike" resultType="string" >
+  <![CDATA[
+  	select
+  		user_id
+  	from
+  		sns_prj.`like`
+  	where user_id = #{user_id}
+  	and board_id = #{board_id}
+  	]]>	
+	</select>
+	
+	<update id="updateLikecnt">
+		update sns_prj.`common_board`
+		set like_cnt = (select count(*) from `like` where board_id=#{board_id})
+		where board_id = #{board_id}
+	</update>
+	
+	<select id="selectLikecnt" resultType="Int">
+		select like_cnt
+		from sns_prj.`common_board`
+		where board_id = #{board_id}
+	</select>
+	
+</mapper>

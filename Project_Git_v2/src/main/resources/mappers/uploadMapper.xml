@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.upload.UploadMapper">
+
+	<insert id="contentImgWrite">
+	insert into content_img (img_name,board_id,original_name,reg_time) values (#{img_name},#{board_id},#{original_name},#{time});
+	</insert>
+	
+	<insert id="updatefile">
+	insert into content_img (img_name,board_id,original_name,reg_time) values (#{img_name},#{board_id},#{original_name},#{time});
+	</insert>
+	
+	
+	
+	<select id="getFirstImg" resultType="string">
+	select img_name from content_img where board_id = #{board_id} order by reg_time limit 1;
+	</select>
+	
+	<select id="getimgboardid" resultType="String" >
+	   select 
+	         *
+	   from
+	      sns_prj.`content_img`
+	    where `board_id` = #{board_id}
+   </select>
+   
+   <delete id="deleteupload_boardid">
+	   delete
+	   from
+	      sns_prj.`content_img`
+	      where `board_id` = #{board_id}
+
+   </delete>
+   
+   <delete id="deleteimg" parameterType="hashmap" >
+	 delete
+	 from
+	 sns_prj.`content_img`
+	 where board_id = #{board_id}
+	 and img_name = #{filename}
+	 
+   </delete>
+   
+</mapper>

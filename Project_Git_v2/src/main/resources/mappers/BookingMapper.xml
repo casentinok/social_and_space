@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.project.mapper.BookingMapper">
+
+
+	<insert id = "insertbooking" parameterType="kr.co.project.domain.BookingVO">
+	INSERT INTO `sns_prj`.`booking` (`board_id`, `booking_startdate`, `booking_enddate`, `people`, `user_id`,`option1`,`option2`,`option3`,`option4`) 
+	VALUES (#{board_id}, #{booking_startdate}, #{booking_enddate}, #{people}, #{user_id},#{option1},#{option2},#{option3},#{option4});
+	</insert>
+	
+	<select id="tbookingList" parameterType="hashmap" resultType="kr.co.project.domain.BookingListVO">
+	select addr, amenities1, amenities2, amenities3, amenities4, rsv_num,
+	b.booking_startdate, b.booking_enddate, g.people, g.board_id, c.user_id as "giver_id", b.user_id as "taker_id", 
+	option1, option2, option3, option4 
+	from giver_board as `g`, booking as `b`, common_board as `c`
+	where `g`.board_id=`b`.board_id
+	and `c`.board_id=`g`.board_id
+	and `b`.user_id= #{user_id}
+	order by b.booking_enddate desc;
+	</select>
+	
+	<select id="gbookingList" parameterType="hashmap" resultType="kr.co.project.domain.BookingListVO">
+	select addr, amenities1, amenities2, amenities3, amenities4, rsv_num,
+	b.booking_startdate, b.booking_enddate, g.people, g.board_id, c.user_id as "giver_id", b.user_id as "taker_id", 
+	option1, option2, option3, option4 
+	from giver_board g, booking b, common_board c
+	where g.board_id=b.board_id
+	and c.board_id=g.board_id
+	and c.user_id= #{user_id}
+	order by b.booking_enddate desc;
+	</select>
+	
+	<select id="checkBooking"  resultType="kr.co.project.domain.BookingListVO">
+		select addr, amenities1, amenities2, amenities3, amenities4, rsv_num,
+		b.booking_startdate, b.booking_enddate, g.people, g.board_id, c.user_id as "giver_id", b.user_id as "taker_id", 
+		option1, option2, option3, option4 
+		from giver_board g, booking b, common_board c
+		where g.board_id=b.board_id
+		and c.board_id=g.board_id
+		and `b`.rsv_num = #{rsv_num};
+	</select>
+
+	<select id="bookingAddr" resultType="String">
+		select addr
+		from booking as `b`, giver_board as `g`
+		where `b`.board_id = `g`.board_id
+		and rsv_num = #{rsv_num}
+	</select>
+	
+	<delete id="deleteBooking">
+		delete 
+		from booking
+		where rsv_num = #{rsv_num};
+	</delete>
+</mapper>
