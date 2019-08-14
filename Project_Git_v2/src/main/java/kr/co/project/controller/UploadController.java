@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sun.javafx.collections.MappingChange.Map;
+
 
 import kr.co.project.domain.CommonBoardVO;
 import kr.co.project.domain.ContentImgVO;
