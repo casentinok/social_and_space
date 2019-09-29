@@ -22,7 +22,10 @@
 	<resources mapping="board/data/**" location="/resources/data/" />
 	<resources mapping="board/img/**" location="/resources/img/" />
 	<resources mapping="board/js/**" location="/resources/js/" />
-	<resources mapping="/uploads/**" location="file:///C:/data/"/>
+	<!-- window 환경 -->
+<!-- 	<resources mapping="/uploads/**" location="file:///C:/data/"/> -->
+	<!-- ubuntu 에서 -->
+	<resources mapping="/uploads/**" location="file:///home/tomcat/upload/"/>
 
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->

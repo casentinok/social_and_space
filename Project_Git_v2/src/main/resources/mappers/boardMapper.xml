@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.project.mapper.BoardMapper">
+<mapper namespace="kr.co.project.BoardMapper">
 
 
 	<select id="takerListAll"
@@ -285,15 +285,18 @@ where
 	<delete id="deletecontentimg" parameterType="string">
 	<![CDATA[
 	delete from sns_prj.content_img
-	where board_id = (select board_id from common_board where user_id = #{user_id});
+	where board_id IN (select board_id from common_board where user_id = #{user_id});
 	]]>
+	
 	</delete>
 	
 	<delete id="deletegiverboard_userid" parameterType="string">
 	<![CDATA[
 	delete from sns_prj.giver_board
-	where board_id = (select board_id from common_board where user_id = #{user_id});
+	where board_id IN (select board_id from common_board where user_id = #{user_id});
 	]]>
+	
+	<!-- 20190928 query update ki -->
 	</delete>
 	
 	<delete id="deletecommonboard_boardid" parameterType="int">

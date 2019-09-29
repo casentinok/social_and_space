@@ -297,3 +297,17 @@
 
 .btn_3.fix-width{font-size:13px;padding:9px 8px; width:100%;}
 .btn_2.fix-width{font-size:13px;padding:9px 8px;width:100%;}
+
+
+#likecnt {
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    text-align: right;
+    margin-top: -10px;
+}
+#logotext {
+    position: relative;
+    top: 5px;
+    left: -9px;
+}

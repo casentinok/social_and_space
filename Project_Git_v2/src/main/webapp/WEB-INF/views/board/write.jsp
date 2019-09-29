@@ -152,8 +152,8 @@
 					<c:if test="${ sessionScope.user_type == 1 }">
 						<!-- Start Map -->
 						<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-						<script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=b71c545210111992d3f4b64ae0245b27&libraries=services"></script>
-						<!-- <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=2b83f513db866294e637be33235d3d0d&libraries=services"></script> -->
+						<!-- <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=b71c545210111992d3f4b64ae0245b27&libraries=services"></script> -->
+						<script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=2b83f513db866294e637be33235d3d0d&libraries=services"></script>
 						<div class="row">
 							<div class="col-md-6 col-sm-6 cst-form-group">
 								<div class="cst-form-group">

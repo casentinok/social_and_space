@@ -33,7 +33,7 @@
 						<a class="tooltip_flip tooltip-effect-1" href="javascript:void(0);">
 							+
 						<!-- <span class="tooltip-content-flip"></span> -->
-						<%-- <span>${bvo.like_cnt}</span> --%>
+						<span>${bvo.like_cnt}</span>
 						</a> 
 					</div>
 					<!-- End wish list-->

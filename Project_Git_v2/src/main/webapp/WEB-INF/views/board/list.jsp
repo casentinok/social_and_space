@@ -34,7 +34,7 @@
 					<c:forEach begin="${status.index}" end="${status.index}" var="lvo"
 							items="${like }">
 						<img class="like" src="img/${lvo}" align="right">
-						<span id="likecnt">5</span>
+						<span id="likecnt">${bvo.like_cnt}</span>
 						</c:forEach>
 						<input type="hidden" value="${bvo.board_id}" class="board_id">
 						<input type="hidden" value="${sessionScope.user_id}" class="user_id">
@@ -47,47 +47,47 @@
 		</div>
 		<!-- End col-md-4 -->
 	</c:forEach>
-	
-	
-   <script>
+</c:if>
+  <script>
    $(function(){
+	   console.log($('.like'));
        $(document).on("click",'.like',function(){
-    	   var that = $(this).nextSiblings(".likecnt");
+    	   
+    	   var that = $(this).siblings("#likecnt");
     	   
           var imgsrc = $(this).attr("src");
-          var board_id = $(this).next(".board_id").val();
+          var board_id = $(this).siblings(".board_id").val();
           console.log(board_id);
           console.log(imgsrc);
           if(imgsrc == "img/like1.png"){//1이 비어있는거            
              $(this).attr("src","img/like2.png");
              
-             like("board/insertLike.do",imgsrc,board_id);
-             likecnt("board/selectLikecnt.do",board_id,that);
+             like("/board/insertLike.do",imgsrc,board_id,that);
+             //likecnt("/board/selectLikecnt.do",board_id,that);
                    
           }else{
              $(this).attr("src","img/like1.png");
              
-             like("board/removeLike.do",imgsrc,board_id);
-             likecnt("board/selectLikecnt.do",board_id,that);      
+             like("/board/removeLike.do",imgsrc,board_id,that);
+             //likecnt("/board/selectLikecnt.do",board_id,that);      
           }
        })
              
-       function like(act,src,board_id){
-          
-          var use
-          r_id = $(".user_id").val();
-          console.log(act);
-          var sendData = {'board_id' : board_id, 'user_id' : user_id };
-          $.ajax({
-             url:act,
-             type :'post',
-             data: sendData,
-             success : function(data){
-                likecnt("board/selectLikecnt.do");
-             }
-          })
-       }   
-       
+     
+       function like(act,src,board_id,that){
+           
+           var user_id = $(".user_id").val();
+           console.log(act);
+           var sendData = {'board_id' : board_id, 'user_id' : user_id };
+           $.ajax({
+              url:act,
+              type :'post',
+              data: sendData,
+              success : function(data){
+                 likecnt("/board/selectLikecnt.do",board_id,that);
+              }
+           })
+        }
        
        function likecnt(act, board_id,that) {
            //var board_id = $(".board_id").val();
@@ -102,16 +102,15 @@
                  //console.log("쿼리문 실행해서 값이 있으면 false, 없으면 true 입니다 : " + data);               
                  //changeImg(src);
                  console.log(data);
-                 this.text(data);
-
+                 if(that){
+                 	that.text(data);
+                 }
               }
            })
-        }
+        }       
+
     })
    </script>
-
-
-</c:if>
 
 
 <c:if test="${list == null}">

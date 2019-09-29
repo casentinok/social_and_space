@@ -47,6 +47,9 @@ public class UploadDTO {
 		UUID uid = UUID.randomUUID();
 		String savedName = uid.toString() + "_" + originalName;
 		File target = new File(uploadPath, savedName);		
+		target.setWritable(true, true);
+		target.setExecutable(true, true);
+		target.setReadable(true, true);
 		FileCopyUtils.copy(fileData, target);
 		return savedName;
 	}

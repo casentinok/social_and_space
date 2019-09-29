@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		sns_prj.board_has_favorite 
 	where 
 		board_id = #{board_id}
-	order by favorite_id asc
+	order by favorite_id asc 
 	</select>
 	
 	<select id = "selectfavname" parameterType="kr.co.project.domain.CommonBoardVO" resultType="string">
@@ -96,8 +96,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="delfav_userid" parameterType="string">
 	<![CDATA[
 	delete from sns_prj.`board_has_favorite`
-	where board_id = (select board_id from common_board where user_id = #{user_id});
+	where board_id IN (select board_id from common_board where user_id = #{user_id});
 	]]>
+	<!-- 20190928 query update ki -->
 	</delete>
 	
 </mapper>

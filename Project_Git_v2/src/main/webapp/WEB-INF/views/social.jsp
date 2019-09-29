@@ -166,10 +166,10 @@
              })
  		
    })
-      $(function(){
+     /*  $(function(){
          $(document).on("click",'.like',function(){
             var imgsrc = $(this).attr("src");
-            var board_id = $(this).next(".board_id").val();
+            var board_id = $(this).siblings(".board_id").val();
             console.log(board_id);
             console.log(imgsrc);
             if(imgsrc == "img/like1.png"){//1이 비어있는거            
@@ -189,7 +189,7 @@
                
          
                   
-      })
+      }) */
    </script>
 <%@include file="./include/footer.jsp"%>
 

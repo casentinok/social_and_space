@@ -77,6 +77,7 @@
 				},
 				success : function(data) {
 					addData(predi,data,"listWrap");
+					
 					//$("#listWrap").append(data);
 				}
 			});
@@ -249,10 +250,10 @@
 		}
 		
 		function html(target,data){
-			document.getElementById(target).innerHTML = data;
+			document.getElementById(target).innerHTML = data;				
 		}
 		function append(target,data){
-			document.getElementById(target).innerHTML +=data;
+			document.getElementById(target).innerHTML +=data;		
 		}
 		
 	});
@@ -420,116 +421,70 @@
 				all tours (144) </a>
 		</p> -->
 	</div>
-	<!-- End container -->
-	<script>
-	
-		$(function(){
-			$(document).on("click",'.like',function(){
-				var imgsrc = $(this).attr("src");
-				var board_id = $(this).next(".board_id").val();
-				console.log(board_id);
-				console.log(imgsrc);
-				if(imgsrc == "img/like1.png"){//1이 비어있는거				
-					$(this).attr("src","img/like2.png");
-					
-					like("board/insertLike.do",imgsrc,board_id);
-							
-				}else{
-					$(this).attr("src","img/like1.png");
-					
-					like("board/removeLike.do",imgsrc,board_id);
-							
-				}
-			})
-					
-			function like(act,src,board_id){
-				
-				var user_id = $(".user_id").val();
-				console.log(act);
-				var sendData = {'board_id' : board_id, 'user_id' : user_id };
-				$.ajax({
-					url:act,
-					type :'post',
-					data: sendData,
-					success : function(data){
-						//likecnt("board/selectLikecnt.do");
-					}
-				})
-			}	
-						
-		})
-	</script>
+	<!-- End container -->	
+  <script>
+   $(function(){
+       $(document).on("click",'.like',function(){
+    	   
+    	   var that = $(this).siblings("#likecnt");
+    	   
+          var imgsrc = $(this).attr("src");
+          var board_id = $(this).siblings(".board_id").val();
+          console.log(board_id);
+          console.log(imgsrc);
+          if(imgsrc == "img/like1.png"){//1이 비어있는거            
+             $(this).attr("src","img/like2.png");
+             
+             like("/board/insertLike.do",imgsrc,board_id,that);
+             //likecnt("/board/selectLikecnt.do",board_id,that);
+                   
+          }else{
+             $(this).attr("src","img/like1.png");
+             
+             like("/board/removeLike.do",imgsrc,board_id,that);
+             //likecnt("/board/selectLikecnt.do",board_id,that);      
+          }
+       })
+             
+     
+       function like(act,src,board_id,that){
+           
+           var user_id = $(".user_id").val();
+           console.log(act);
+           var sendData = {'board_id' : board_id, 'user_id' : user_id };
+           $.ajax({
+              url:act,
+              type :'post',
+              data: sendData,
+              success : function(data){
+                 likecnt("/board/selectLikecnt.do",board_id,that);
+              }
+           })
+        }
+       
+       function likecnt(act, board_id,that) {
+           //var board_id = $(".board_id").val();
+           var user_id = $(".user_id").val();
 
-	<footer>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4 col-sm-3">
-					<h3>Need help?</h3>
-					<a href="tel://004542344599" id="phone">010 2733 5696</a> <a
-						href="mailto:help@citytours.com" id="email_footer">kyungohhelp@gmail.com</a>
-				</div>
-				<div class="col-md-3 col-sm-3">
-					<h3>About</h3>
-					<ul>
-						<li><a href="#">About us</a></li>
-						<li><a href="#">경오</a></li>
-						<li><a href="#">설아</a></li>
-						<li><a href="#">태성</a></li>
-						<li><a href="#">푸름</a></li>
-					</ul>
-				</div>
-				<!-- <div class="col-md-3 col-sm-3">
-					<h3>Discover</h3>
-					<ul>
-						<li><a href="#">Community blog</a></li>
-						<li><a href="#">Tour guide</a></li>
-						<li><a href="#">Wishlist</a></li>
-						<li><a href="#">Gallery</a></li>
-					</ul>
-				</div>
-				<div class="col-md-2 col-sm-3">
-					<h3>Settings</h3>
-					<div class="styled-select">
-						<select class="form-control" name="lang" id="lang">
-							<option value="English" selected>English</option>
-							<option value="French">French</option>
-							<option value="Spanish">Spanish</option>
-							<option value="Russian">Russian</option>
-						</select>
-					</div>
-					<div class="styled-select">
-						<select class="form-control" name="currency" id="currency">
-							<option value="USD" selected>USD</option>
-							<option value="EUR">EUR</option>
-							<option value="GBP">GBP</option>
-							<option value="RUB">RUB</option>
-						</select>
-					</div>
-				</div> -->
-			</div>
-			<!-- End row -->
-			<!-- <div class="row">
-				<div class="col-md-12">
-					<div id="social_footer">
-						<ul>
-							<li><a href="#"><i class="icon-facebook"></i></a></li>
-							<li><a href="#"><i class="icon-twitter"></i></a></li>
-							<li><a href="#"><i class="icon-google"></i></a></li>
-							<li><a href="#"><i class="icon-instagram"></i></a></li>
-							<li><a href="#"><i class="icon-pinterest"></i></a></li>
-							<li><a href="#"><i class="icon-vimeo"></i></a></li>
-							<li><a href="#"><i class="icon-youtube-play"></i></a></li>
-							<li><a href="#"><i class="icon-linkedin"></i></a></li>
-						</ul>
-						<p>© Citytours 2015</p>
-					</div>
-				</div>
-			</div> -->
-			<!-- End row -->
-		</div>
-		<!-- End container -->
-	</footer>
-	<!-- End footer -->
+           var sendData = {'board_id' : board_id, 'user_id' : user_id };
+           $.ajax({
+              url : act,
+              type : 'post',
+              data : sendData,
+              success : function(data) {
+                 //console.log("쿼리문 실행해서 값이 있으면 false, 없으면 true 입니다 : " + data);               
+                 //changeImg(src);
+                 console.log(data);
+                 if(that){
+                 	that.text(data);
+                 }
+              }
+           })
+        }       
+
+    })
+   </script>
+		<%@include file="include/footer.jsp"%>
 
 	<div id="toTop"></div>
 	<!-- Back to top button -->
